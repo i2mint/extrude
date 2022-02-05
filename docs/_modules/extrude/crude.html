@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>extrude.crude &mdash; extrude 0.1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/toggleprompt.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> extrude
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/crude.html">extrude.crude</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">extrude</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>extrude.crude</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for extrude.crude</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Control complex python object through strings.</span>
+<span class="sd">Wrap functions so that the complex arguments can be specified through a string key</span>
+<span class="sd">that points to the actual python object (which is stored in a session&#39;s memory or</span>
+<span class="sd">persisted in some fashion).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">Parameter</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">dill</span>
+
+<span class="kn">from</span> <span class="nn">i2</span> <span class="kn">import</span> <span class="n">Sig</span>
+<span class="kn">from</span> <span class="nn">i2.wrapper</span> <span class="kn">import</span> <span class="n">Ingress</span><span class="p">,</span> <span class="n">wrap</span>
+<span class="kn">from</span> <span class="nn">dol</span> <span class="kn">import</span> <span class="n">Files</span><span class="p">,</span> <span class="n">wrap_kvs</span>
+<span class="kn">from</span> <span class="nn">dol.filesys</span> <span class="kn">import</span> <span class="n">mk_tmp_dol_dir</span><span class="p">,</span> <span class="n">ensure_dir</span>
+
+<span class="n">ignore_import_problems</span> <span class="o">=</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span>
+
+
+<span class="n">KT</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">VT</span> <span class="o">=</span> <span class="n">Any</span>
+<span class="n">StoreType</span> <span class="o">=</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">KT</span><span class="p">,</span> <span class="n">VT</span><span class="p">]</span>
+<span class="n">StoreName</span> <span class="o">=</span> <span class="n">KT</span>
+<span class="n">Mall</span> <span class="o">=</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">StoreName</span><span class="p">,</span> <span class="n">StoreType</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="auto_key"><a class="viewcode-back" href="../../module_docs/extrude/crude.html#extrude.crude.auto_key">[docs]</a><span class="k">def</span> <span class="nf">auto_key</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KT</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Make a str key from arguments.</span>
+
+<span class="sd">    &gt;&gt;&gt; auto_key(1,2,c=3,d=4)</span>
+<span class="sd">    &#39;1,2,c=3,d=4&#39;</span>
+<span class="sd">    &gt;&gt;&gt; auto_key(1,2)</span>
+<span class="sd">    &#39;1,2&#39;</span>
+<span class="sd">    &gt;&gt;&gt; auto_key(c=3,d=4)</span>
+<span class="sd">    &#39;c=3,d=4&#39;</span>
+<span class="sd">    &gt;&gt;&gt; auto_key()</span>
+<span class="sd">    &#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">args_str</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+    <span class="n">kwargs_str</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">=</span><span class="si">{</span><span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="n">args_str</span><span class="p">,</span> <span class="n">kwargs_str</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="DillFiles"><a class="viewcode-back" href="../../module_docs/extrude/crude.html#extrude.crude.DillFiles">[docs]</a><span class="nd">@wrap_kvs</span><span class="p">(</span><span class="n">data_of_obj</span><span class="o">=</span><span class="n">dill</span><span class="o">.</span><span class="n">dumps</span><span class="p">,</span> <span class="n">obj_of_data</span><span class="o">=</span><span class="n">dill</span><span class="o">.</span><span class="n">loads</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DillFiles</span><span class="p">(</span><span class="n">Files</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes and deserializes with dill&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="mk_mall_of_dill_stores"><a class="viewcode-back" href="../../module_docs/extrude/crude.html#extrude.crude.mk_mall_of_dill_stores">[docs]</a><span class="k">def</span> <span class="nf">mk_mall_of_dill_stores</span><span class="p">(</span><span class="n">store_names</span><span class="o">=</span><span class="n">Iterable</span><span class="p">[</span><span class="n">StoreName</span><span class="p">],</span> <span class="n">rootdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a mall of DillFiles stores&quot;&quot;&quot;</span>
+    <span class="n">rootdir</span> <span class="o">=</span> <span class="n">rootdir</span> <span class="ow">or</span> <span class="n">mk_tmp_dol_dir</span><span class="p">(</span><span class="s1">&#39;crude&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">store_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">store_names</span> <span class="o">=</span> <span class="n">store_names</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">name_and_rootdir</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">store_names</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">ensure_dir</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">root</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">DillFiles</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">name_and_rootdir</span><span class="p">()}</span></div>
+
+
+<span class="c1"># TODO: store_on_output: use i2.wrapper and possibly extend i2.wrapper to facilitate</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+
+<div class="viewcode-block" id="store_on_output"><a class="viewcode-back" href="../../module_docs/extrude/crude.html#extrude.crude.store_on_output">[docs]</a><span class="k">def</span> <span class="nf">store_on_output</span><span class="p">(</span>
+    <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">save_name_param</span><span class="o">=</span><span class="s1">&#39;save_name&#39;</span><span class="p">,</span>
+    <span class="n">add_store_to_func_attr</span><span class="o">=</span><span class="s1">&#39;output_store&#39;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrap func so it will have an extra save_name_param that can be used to</span>
+<span class="sd">    indicate whether to save the output of the function call to that key, in</span>
+<span class="sd">    that store</span>
+
+<span class="sd">    :param func:</span>
+<span class="sd">    :param store:</span>
+<span class="sd">    :param save_name_param: Name of the extra param</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span>
+            <span class="n">store_on_output</span><span class="p">,</span>
+            <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
+            <span class="n">save_name_param</span><span class="o">=</span><span class="n">save_name_param</span><span class="p">,</span>
+            <span class="n">add_store_to_func_attr</span><span class="o">=</span><span class="n">add_store_to_func_attr</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">save_name_param_obj</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">save_name_param</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">Parameter</span><span class="o">.</span><span class="n">KEYWORD_ONLY</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">annotation</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">save_name_param_obj</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">store</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="nd">@sig</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">save_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">save_name_param</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">save_name</span><span class="p">:</span>
+                <span class="n">store</span><span class="p">[</span><span class="n">save_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
+            <span class="k">return</span> <span class="n">output</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">add_store_to_func_attr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">_func</span><span class="p">,</span> <span class="n">add_store_to_func_attr</span><span class="p">,</span> <span class="n">store</span><span class="p">)</span>
+
+        <span class="n">_func</span><span class="o">.</span><span class="n">output_store</span> <span class="o">=</span> <span class="n">store</span>
+        <span class="k">return</span> <span class="n">_func</span></div>
+
+
+<div class="viewcode-block" id="prepare_for_crude_dispatch"><a class="viewcode-back" href="../../module_docs/extrude/crude.html#extrude.crude.prepare_for_crude_dispatch">[docs]</a><span class="k">def</span> <span class="nf">prepare_for_crude_dispatch</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">store_for_param</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mall</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_store_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">save_name_param</span><span class="o">=</span><span class="s1">&#39;save_name&#39;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrap func into something that is ready for CRUDE dispatch.</span>
+
+<span class="sd">    :param func: The function to wrap</span>
+<span class="sd">    :param store_for_param:</span>
+<span class="sd">    :param output_store_name:</span>
+<span class="sd">    # :param save_name_param:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ingress</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">store_for_param</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="n">crude_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">names</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">store_for_param</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">kwargs_trans</span><span class="p">(</span><span class="n">outer_kw</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">store_name</span> <span class="ow">in</span> <span class="n">crude_params</span><span class="p">:</span>
+                    <span class="n">store_key</span> <span class="o">=</span> <span class="n">outer_kw</span><span class="p">[</span><span class="n">store_name</span><span class="p">]</span>
+                    <span class="k">yield</span> <span class="n">store_name</span><span class="p">,</span> <span class="n">store_for_param</span><span class="p">[</span><span class="n">store_name</span><span class="p">][</span><span class="n">store_key</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span>
+
+        <span class="n">ingress</span> <span class="o">=</span> <span class="n">Ingress</span><span class="p">(</span>
+            <span class="n">inner_sig</span><span class="o">=</span><span class="n">sig</span><span class="p">,</span>
+            <span class="n">kwargs_trans</span><span class="o">=</span><span class="n">kwargs_trans</span><span class="p">,</span>
+            <span class="n">outer_sig</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">sig</span><span class="o">.</span><span class="n">ch_annotations</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">crude_params</span><span class="p">})</span>
+                <span class="c1"># + [save_name_param]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="n">wrapped_f</span> <span class="o">=</span> <span class="n">wrap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">ingress</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_store_name</span><span class="p">:</span>
+        <span class="n">output_store</span> <span class="o">=</span> <span class="n">store_for_param</span><span class="p">[</span><span class="n">output_store_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">store_on_output</span><span class="p">(</span>
+            <span class="n">wrapped_f</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">output_store</span><span class="p">,</span> <span class="n">save_name_param</span><span class="o">=</span><span class="n">save_name_param</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># def egress(func_output):</span>
+        <span class="c1">#     print(f&quot;{list(store_for_param)=}&quot;)</span>
+        <span class="c1">#     print(f&quot;{output_store_name=}&quot;)</span>
+        <span class="c1">#     print(f&quot;{list(store_for_param[output_store_name])=}&quot;)</span>
+        <span class="c1">#     store_for_param[output_store_name] = func_output</span>
+        <span class="c1">#     print(f&quot;{list(store_for_param[output_store_name])=}&quot;)</span>
+        <span class="c1">#     return func_output</span>
+
+    <span class="k">return</span> <span class="n">wrapped_f</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
