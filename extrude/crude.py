@@ -129,10 +129,17 @@ def prepare_for_crude_dispatch(
     save_name_param="save_name",
 ):
     """Wrap func into something that is ready for CRUDE dispatch.
+    It will be a function for whom specific arguments will be specified by strings,
+    via underlying stores containing the values.
+    We say that those arguments were crude-dispatched.
 
     :param func: The function to wrap
-    :param store_for_param:
-    :param output_store_name:
+    :param store_for_param: A dict whose keys specify which params should be
+        crude-dispatched and whose values are the stores to be used for said param.
+        Note that ``store_for_param`` can contain keys that are NOT params of ``func``.
+        These will then just be ignored.
+    :param output_store_name: If given, specifies that the output of every function
+        call should be saved in that store
     # :param save_name_param:
     :return:
     """
@@ -143,12 +150,38 @@ def prepare_for_crude_dispatch(
         crude_params = [x for x in sig.names if x in store_for_param]
 
         def kwargs_trans(outer_kw):
-            def gen():
+            """
+            Let's say you have a function with three params: a, b, and c, whose arguments
+            should be ints. Let's say you want a and c to be cruded.
+            Then you need to specify a store for each one of these:
+
+            >>> store_for_param = {
+            ...     'a': {'one': 1, 'two': 2},
+            ...     'c': {'three': 3}
+            ... }
+
+            What kwargs_trans will with this store_for_param, is this:
+
+            >>> kwargs_trans({'a': 'one', 'b': 2, 'c': 'three'})
+            {'a': 1, 'b': 2, 'c': 3}
+            """
+            # outer_kw is going to be the new/wrapped/cruded interface of the function
+            # That is, the one that takes strings to specify arguments
+            # What we need to do now is transform the cruded argument values from strings
+            # to the values these strings are pointing to (via the store corresponding
+            # to that argument).
+            def get_values_from_stores():
+                # Note: only need to specify arguments that change
                 for store_name in crude_params:
+                    # Note: The store name is the param name.
+                    # Get the argument value from outer_kw. This value is the key to
+                    # the actual value we want (found in the store)
                     store_key = outer_kw[store_name]
+                    # store_key points to the value the outer user wants the value for
+                    # store_for_param[store_name] is the store where to find it
                     yield store_name, store_for_param[store_name][store_key]
 
-            return dict(gen())
+            return dict(get_values_from_stores())
 
         ingress = Ingress(
             inner_sig=sig,
