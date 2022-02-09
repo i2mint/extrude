@@ -125,8 +125,9 @@ def store_on_output(
 def prepare_for_crude_dispatch(
     func: Callable,
     store_for_param: Optional[Mall] = None,
-    output_store_name: Optional[str] = None,
-    save_name_param="save_name",
+    output_store: Optional[Union[Mapping, str]] = None,
+    save_name_param: str = "save_name",
+    include_store_for_param: bool = False,
 ):
     """Wrap func into something that is ready for CRUDE dispatch.
     It will be a function for whom specific arguments will be specified by strings,
@@ -194,8 +195,15 @@ def prepare_for_crude_dispatch(
 
     wrapped_f = wrap(func, ingress)
 
-    if output_store_name:
-        output_store = store_for_param[output_store_name]
+    if output_store:
+        if isinstance(output_store, str):
+            # if output_store is a string, it should be the a key to store_for_param
+            store_for_param_key_for_output_store = output_store
+            output_store = store_for_param[store_for_param_key_for_output_store]
+        else:
+            # TODO: Assert MutableMapping, or just existence of __setitem__?
+            pass
+
         return store_on_output(
             wrapped_f,
             store=output_store,
@@ -209,5 +217,7 @@ def prepare_for_crude_dispatch(
         #     store_for_param[output_store_name] = func_output
         #     print(f"{list(store_for_param[output_store_name])=}")
         #     return func_output
+    if include_store_for_param:
+        wrapped_f.store_for_param = store_for_param
 
     return wrapped_f
