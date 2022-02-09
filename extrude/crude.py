@@ -40,9 +40,9 @@ def auto_key(*args, **kwargs) -> KT:
     >>> auto_key()
     ''
     """
-    args_str = ",".join(map(str, args))
-    kwargs_str = ",".join(map(lambda kv: f"{kv[0]}={kv[1]}", kwargs.items()))
-    return ",".join(filter(None, [args_str, kwargs_str]))
+    args_str = ','.join(map(str, args))
+    kwargs_str = ','.join(map(lambda kv: f'{kv[0]}={kv[1]}', kwargs.items()))
+    return ','.join(filter(None, [args_str, kwargs_str]))
 
 
 @wrap_kvs(data_of_obj=dill.dumps, obj_of_data=dill.loads)
@@ -54,7 +54,7 @@ class DillFiles(Files):
 
 def mk_mall_of_dill_stores(store_names=Iterable[StoreName], rootdir=None):
     """Make a mall of DillFiles stores"""
-    rootdir = rootdir or mk_tmp_dol_dir("crude")
+    rootdir = rootdir or mk_tmp_dol_dir('crude')
     if isinstance(store_names, str):
         store_names = store_names.split()
 
@@ -75,8 +75,8 @@ def store_on_output(
     func=None,
     *,
     store=None,
-    save_name_param="save_name",
-    add_store_to_func_attr="output_store",
+    save_name_param='save_name',
+    add_store_to_func_attr='output_store',
 ):
     """Wrap func so it will have an extra save_name_param that can be used to
     indicate whether to save the output of the function call to that key, in
@@ -98,7 +98,7 @@ def store_on_output(
         save_name_param_obj = Parameter(
             name=save_name_param,
             kind=Parameter.KEYWORD_ONLY,
-            default="",
+            default='',
             annotation=str,
         )
         sig = Sig(func) + [save_name_param_obj]
