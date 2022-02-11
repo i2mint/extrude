@@ -1,9 +1,11 @@
 from functools import wraps
+import json
+from sys import argv
 from streamlitfront.base import dispatch_funcs
 from http2py import HttpClient
 from i2.wrapper import Sig
 
-def flat(meth):
+def flatten(meth):
     sig = Sig(meth) - 'self'
 
     @sig
@@ -13,16 +15,14 @@ def flat(meth):
 
     return flat_func
 
-def mk_api():
-    api_url = "http://127.0.0.1:3030"  # TODO: should get this from service object
-    return HttpClient(url=f"{api_url}/openapi")  # Why openapi?
 
 if __name__ == '__main__':
-    api = mk_api()
+    openapi_spec=json.loads(argv[1])
+    api = HttpClient(openapi_spec=openapi_spec)
     funcs = [
-        flat(api.foo),
-        flat(api.bar),
-        flat(api.confuser),
+        flatten(api.foo),
+        flatten(api.bar),
+        flatten(api.confuser),
     ]
 
     app = dispatch_funcs(funcs)
