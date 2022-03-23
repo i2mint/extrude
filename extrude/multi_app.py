@@ -78,7 +78,6 @@ def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = Non
             dispatch = getattr(current_module, dispatch)
         app = dispatch()
     app()
-    st.footer()
     st.button(label='Back to root', on_click=lambda: set_current_module(ROOT_APP))
 
 
