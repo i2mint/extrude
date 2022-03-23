@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit as st
 from typing import Iterable
 import importlib.util
+import sys
 import types
 
 from streamlitfront.base import dispatch_funcs
@@ -53,8 +54,8 @@ def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = Non
         configs = {}
 
     def get_display_name(module):
-        module_config = configs.get(module.__name__, {})
-        return module_config.get('display_ name', module.__name__)
+        module_config = configs.get(module.__name__, getattr(module, 'extrude_configs', configs))
+        return getattr(module, 'display_name', module_config.get('display_name', module.__name__))
 
     app_name_mapping = {module.__name__: get_display_name(module) for module in modules}
     module_mapping = {module.__name__: module for module in modules}
@@ -66,12 +67,18 @@ def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = Non
         return render_root_nav(app_name_mapping)
 
     current_module = module_mapping[current_app_name]
-    config_for_module = configs.get(current_app_name, configs)
-    dispatch = config_for_module.get('dispatch', mk_dflt_dispatch(current_module, config_for_module))
-    if isinstance(dispatch, str):
-        dispatch = getattr(current_module, dispatch)
-    app = dispatch()
+    config_for_module = configs.get(current_app_name, getattr(current_module, 'extrude_configs', configs))
+    app = getattr(current_module, 'app', config_for_module.get('app', None))
+    print(f'app: {app}')
+    if isinstance(app, str):
+        app = getattr(current_module, app, config_for_module.get(app, None))
+    if not callable(app):
+        dispatch = config_for_module.get('dispatch', mk_dflt_dispatch(current_module, config_for_module))
+        if isinstance(dispatch, str):
+            dispatch = getattr(current_module, dispatch)
+        app = dispatch()
     app()
+    st.footer()
     st.button(label='Back to root', on_click=lambda: set_current_module(ROOT_APP))
 
 
@@ -81,7 +88,9 @@ def get_module_from_pathname(pathname):
         pathname = os.path.join(pathname, '__init__.py')
     spec = importlib.util.spec_from_file_location(module_name, pathname)
     module = importlib.util.module_from_spec(spec)
+    sys.modules[module.__name__] = module
     spec.loader.exec_module(module)
+    print(f'module: {module}')
     return module
 
 

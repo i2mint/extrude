@@ -15,4 +15,4 @@ def confuser_2(a: int = 0, x: float = 3.14):
     return (a ** 2) * x
 
 
-extrude_funcs = [foo_2, bar_2, confuser_2]
+func_list = [foo_2, bar_2, confuser_2]
