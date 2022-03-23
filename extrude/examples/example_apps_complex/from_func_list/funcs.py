@@ -1,4 +1,5 @@
-"""A module of functions imported by __init__.py"""
+"""A module of functions imported by __init__.py, demonstrating
+imports within a child app dispatched by extrude."""
 from from_func_list.utils import add
 
 
