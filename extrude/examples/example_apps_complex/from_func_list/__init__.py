@@ -2,5 +2,4 @@
 that will be found by extrude's multi app runner."""
 
 from .funcs import foo, bar, confuser
-
 extrude_funcs = [foo, bar, confuser]
