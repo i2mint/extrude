@@ -1,4 +1,8 @@
-"""Entrypoint for dispatching multiple child applications with a navigation root."""
+"""Entrypoint for dispatching multiple child applications with a navigation root.
+
+How to prepare an application for dispatch:
+
+"""
 
 import os
 from functools import partial
@@ -13,6 +17,26 @@ from streamlitfront.base import dispatch_funcs
 
 ROOT_APP = '__extrude_root__'
 EXTRUDE_FUNCS = 'extrude_funcs'
+
+
+def execute_module_spec(spec):
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module.__name__] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def dispatch_raw_module(spec):
+    def app():
+        return execute_module_spec(spec)
+    return app
+
+
+def get_module_spec_from_pathname(pathname):
+    module_name = os.path.basename(os.path.normpath(pathname))
+    if os.path.isdir(pathname):
+        pathname = os.path.join(pathname, '__init__.py')
+    return importlib.util.spec_from_file_location(module_name, pathname)
 
 
 def set_current_module(app_name):
@@ -35,7 +59,7 @@ def mk_dflt_dispatch(module, configs):
     return dispatch
 
 
-def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = None):
+def dispatch_child_apps(pathnames: Iterable[str], configs: dict = None):
     """Recurses through a Python module to collect objects that can be dispatched to a streamlit app.
 
     :param pathnames: An iterable of files and/or directory to scan through. If a filename
@@ -53,12 +77,14 @@ def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = Non
     if not configs:
         configs = {}
 
-    def get_display_name(module):
-        module_config = configs.get(module.__name__, getattr(module, 'extrude_configs', configs))
-        return getattr(module, 'display_name', module_config.get('display_name', module.__name__))
+    module_specs = [get_module_spec_from_pathname(pathname) for pathname in pathnames]
 
-    app_name_mapping = {module.__name__: get_display_name(module) for module in modules}
-    module_mapping = {module.__name__: module for module in modules}
+    def get_display_name(spec):
+        module_config = configs.get(spec.name, configs)
+        return module_config.get('display_name', spec.name)
+
+    app_name_mapping = {spec.name: get_display_name(spec) for spec in module_specs}
+    module_mapping = {spec.name: spec for spec in module_specs}
     if 'current_app' not in st.session_state:
         st.session_state['current_app'] = ROOT_APP
 
@@ -66,10 +92,12 @@ def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = Non
     if current_app_name == ROOT_APP:
         return render_root_nav(app_name_mapping)
 
-    current_module = module_mapping[current_app_name]
-    config_for_module = configs.get(current_app_name, getattr(current_module, 'extrude_configs', configs))
-    app = getattr(current_module, 'app', config_for_module.get('app', None))
-    print(f'app: {app}')
+    current_module_spec = module_mapping[current_app_name]
+    config_for_module = configs.get(current_app_name, configs)
+    app = config_for_module.get('app', None)
+    if not app:
+        app = dispatch_raw_module(current_module_spec)
+    current_module = execute_module_spec(current_module_spec)
     if isinstance(app, str):
         app = getattr(current_module, app, config_for_module.get(app, None))
     if not callable(app):
@@ -77,32 +105,11 @@ def dispatch_child_apps(modules: Iterable[types.ModuleType], configs: dict = Non
         if isinstance(dispatch, str):
             dispatch = getattr(current_module, dispatch)
         app = dispatch()
-    app()
-    st.button(label='Back to root', on_click=lambda: set_current_module(ROOT_APP))
-
-
-def get_module_from_pathname(pathname):
-    module_name = os.path.basename(os.path.normpath(pathname))
-    if os.path.isdir(pathname):
-        pathname = os.path.join(pathname, '__init__.py')
-    spec = importlib.util.spec_from_file_location(module_name, pathname)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module.__name__] = module
-    spec.loader.exec_module(module)
-    print(f'module: {module}')
-    return module
-
-
-def dispatch_child_apps_from_paths(pathnames: Iterable[str],
-                                   configs: dict = None):
-    """Maps an iterable of pathnames to Python modules and calls dispatch_child_apps.
-
-    :param pathnames: An iterable of paths to scan through. If a path
-        points to a directory (a package), will look for __init__.py within that directory.
-    :param configs: (Optional) See dispatch_child_apps.
-    """
-    modules = [get_module_from_pathname(pathname) for pathname in pathnames]
-    return dispatch_child_apps(modules, configs)
+    try:
+        app()
+    except Exception as error:
+        st.error(str(error))
+    st.sidebar.button(label='Back to root', key='backtoroot', on_click=lambda: set_current_module(ROOT_APP))
 
 
 def dispatch_child_apps_from_root(root_dir: str, configs: dict = None):
@@ -116,7 +123,7 @@ def dispatch_child_apps_from_root(root_dir: str, configs: dict = None):
         raise ValueError(f'{root_dir} is not a path to a directory.')
     children = [path for path in os.listdir(root_pathname) if not path.startswith('__')]
     child_paths = [os.path.join(root_pathname, child) for child in children]
-    return dispatch_child_apps_from_paths(child_paths, configs)
+    return dispatch_child_apps(child_paths, configs)
 
 
 def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict = None):
