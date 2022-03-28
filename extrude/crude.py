@@ -7,6 +7,6 @@ persisted in some fashion).
 
 from warnings import warn
 
-warn(f"Module has moved to front.crude")
+warn(f'Module has moved to front.crude')
 
 from front.crude import *

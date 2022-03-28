@@ -33,8 +33,10 @@ def dispatch_raw_module(spec):
 
     :param spec: importlib.machinery.ModuleSpec
     """
+
     def app():
         return execute_module_spec(spec)
+
     return app
 
 
@@ -54,7 +56,11 @@ def render_root_nav(app_name_mapping: dict):
     st.set_page_config(layout='centered')
     st.header('Choose an app')
     for app_name, display_name in app_name_mapping.items():
-        st.button(key=app_name, label=display_name, on_click=partial(set_current_module, app_name))
+        st.button(
+            key=app_name,
+            label=display_name,
+            on_click=partial(set_current_module, app_name),
+        )
 
 
 def mk_dflt_dispatch(module, configs):
@@ -62,6 +68,7 @@ def mk_dflt_dispatch(module, configs):
 
     def dispatch():
         return dispatch_funcs(funcs, configs=configs)
+
     return dispatch
 
 
@@ -107,7 +114,9 @@ def dispatch_child_apps(pathnames: Iterable[str], configs: dict = None):
     if isinstance(app, str):
         app = getattr(current_module, app, config_for_module.get(app, None))
     if not callable(app):
-        dispatch = config_for_module.get('dispatch', mk_dflt_dispatch(current_module, config_for_module))
+        dispatch = config_for_module.get(
+            'dispatch', mk_dflt_dispatch(current_module, config_for_module)
+        )
         if isinstance(dispatch, str):
             dispatch = getattr(current_module, dispatch)
         app = dispatch()
@@ -115,7 +124,11 @@ def dispatch_child_apps(pathnames: Iterable[str], configs: dict = None):
         app()
     except Exception as error:
         st.error(str(error))
-    st.sidebar.button(label='Back to root', key='backtoroot', on_click=lambda: set_current_module(ROOT_APP))
+    st.sidebar.button(
+        label='Back to root',
+        key='backtoroot',
+        on_click=lambda: set_current_module(ROOT_APP),
+    )
 
 
 def dispatch_child_apps_from_root(root_dir: str, configs: dict = None):
@@ -132,7 +145,9 @@ def dispatch_child_apps_from_root(root_dir: str, configs: dict = None):
     return dispatch_child_apps(child_paths, configs)
 
 
-def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict = None):
+def dispatch_child_apps_from_module(
+    root_module: types.ModuleType, configs: dict = None
+):
     """Takes a root Python module and scans through its immediate children to dispatch functions.
 
     :param root_module: A module that contains one or more child packages to dispatch.
@@ -146,4 +161,6 @@ def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict
     """
     root_filename = root_module.__file__
     root_dir = Path(root_filename).parent.absolute()
-    return dispatch_child_apps_from_root(str(root_dir).replace('__pycache__/', ''), configs)
+    return dispatch_child_apps_from_root(
+        str(root_dir).replace('__pycache__/', ''), configs
+    )

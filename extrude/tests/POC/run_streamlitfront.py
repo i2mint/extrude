@@ -5,6 +5,7 @@ from streamlitfront.base import dispatch_funcs
 from http2py import HttpClient
 from i2.wrapper import Sig
 
+
 def flatten(meth):
     sig = Sig(meth) - 'self'
 
@@ -17,7 +18,7 @@ def flatten(meth):
 
 
 if __name__ == '__main__':
-    openapi_spec=json.loads(argv[1])
+    openapi_spec = json.loads(argv[1])
     api = HttpClient(openapi_spec=openapi_spec)
     funcs = [
         flatten(api.foo),
