@@ -143,7 +143,7 @@ def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict
     >>>
     >>> # workaround for doctest environment
     >>> if 'current_app' not in session_state:
-    >>>     st.session_state['current_app'] = ROOT_APP
+    ...     st.session_state['current_app'] = ROOT_APP
     >>> dispatch_child_apps_from_module(example_apps)
     """
     root_filename = root_module.__file__
