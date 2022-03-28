@@ -20,6 +20,7 @@ EXTRUDE_FUNCS = 'extrude_funcs'
 
 
 def execute_module_spec(spec):
+    """Imports a module into the current environment from a module spec and returns the module"""
     module = importlib.util.module_from_spec(spec)
     sys.modules[module.__name__] = module
     spec.loader.exec_module(module)
@@ -27,12 +28,18 @@ def execute_module_spec(spec):
 
 
 def dispatch_raw_module(spec):
+    """Creates a callable that will execute a module when called.
+    Used to run a streamlit app without needing to modify it.
+
+    :param spec: importlib.machinery.ModuleSpec
+    """
     def app():
         return execute_module_spec(spec)
     return app
 
 
-def get_module_spec_from_pathname(pathname):
+def get_module_spec_from_pathname(pathname: str):
+    """Creates an instance of importlib.machinery.ModuleSpec from a path."""
     module_name = os.path.basename(os.path.normpath(pathname))
     if os.path.isdir(pathname):
         pathname = os.path.join(pathname, '__init__.py')
@@ -40,7 +47,6 @@ def get_module_spec_from_pathname(pathname):
 
 
 def set_current_module(app_name):
-    print(f'goto app_name: {app_name}')
     st.session_state['current_app'] = app_name
 
 
@@ -131,6 +137,14 @@ def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict
 
     :param root_module: A module that contains one or more child packages to dispatch.
     :param configs: (Optional) See dispatch_child_apps.
+
+    >>> import streamlit as st
+    >>> import extrude.examples.example_apps_simple as example_apps
+    >>>
+    >>> # workaround for doctest environment
+    >>> if 'current_app' not in session_state:
+    >>>     st.session_state['current_app'] = ROOT_APP
+    >>> dispatch_child_apps_from_module(example_apps)
     """
     root_filename = root_module.__file__
     root_dir = Path(root_filename).parent.absolute()
