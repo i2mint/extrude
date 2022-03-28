@@ -141,10 +141,8 @@ def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict
     >>> import streamlit as st
     >>> import extrude.examples.example_apps_simple as example_apps
     >>>
-    >>> # workaround for doctest environment
-    >>> if 'current_app' not in st.session_state:
-    ...     st.session_state['current_app'] = ROOT_APP
-    >>> dispatch_child_apps_from_module(example_apps)
+    >>> # this function call won't work correctly in the test environment
+    >>> # dispatch_child_apps_from_module(example_apps)
     """
     root_filename = root_module.__file__
     root_dir = Path(root_filename).parent.absolute()
