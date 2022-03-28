@@ -132,7 +132,7 @@ def dispatch_child_apps_from_module(root_module: types.ModuleType, configs: dict
     :param root_module: A module that contains one or more child packages to dispatch.
     :param configs: (Optional) See dispatch_child_apps.
 
-    >>> import extrude.examples.example_apps as example_apps
+    >>> import extrude.examples.example_apps_simple as example_apps
 
     >>> dispatch_child_apps_from_module(example_apps)
     """
