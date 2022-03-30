@@ -1,4 +1,3 @@
-
 import json
 from typing import Callable, Iterable
 from i2 import name_of_obj
@@ -11,12 +10,8 @@ def run_app(funcs: Iterable[Callable], **kwargs):
 
     with run_process(
         func=run_webservice,
-        func_kwargs=dict(
-            app_obj=funcs,
-            publish_openapi=True,
-            publish_swagger=True
-        ),
-        is_ready=3
+        func_kwargs=dict(app_obj=funcs, publish_openapi=True, publish_swagger=True),
+        is_ready=3,
     ):
         app = mk_app(funcs)
         func_names = [name_of_obj(func) for func in funcs]
@@ -28,7 +23,7 @@ def run_app(funcs: Iterable[Callable], **kwargs):
                 json.dumps(kwargs),
             ],
             command_line='',
-            flag_options={}
+            flag_options={},
         )
 
 
@@ -50,9 +45,8 @@ if __name__ == '__main__':
 
         return flat_func
 
-
-    openapi_spec=json.loads(argv[1])
-    func_names=json.loads(argv[2])
+    openapi_spec = json.loads(argv[1])
+    func_names = json.loads(argv[2])
     kwargs = json.loads(argv[3])
     api = HttpClient(openapi_spec=openapi_spec)
     funcs = [_flatten(getattr(api, name)) for name in func_names]

@@ -10,5 +10,5 @@
    module_docs/extrude/examples/multi_apps_simple
    module_docs/extrude/examples/nav_tester
    module_docs/extrude/multi_app
-   module_docs/extrude/tests/POC/main
-   module_docs/extrude/tests/POC/run_streamlitfront
+   module_docs/extrude/run_app
+   module_docs/extrude/tests/POC
