@@ -1,5 +1,3 @@
-from functools import partial
-import streamlit.bootstrap
 from extrude.run_app import run_app
 
 
@@ -17,7 +15,6 @@ def confuser(a: int = 0, x: float = 3.14):
     return (a ** 2) * x
 
 
-run_streamlit = partial(streamlit.bootstrap.run, command_line='', flag_options={})
 funcs = [foo, bar, confuser]
 
 
