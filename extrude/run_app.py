@@ -62,7 +62,6 @@ def mk_app(
     return dispatch_funcs(ws_funcs, **kwargs)
 
 
-
 def run_app(funcs: Iterable[Callable], *, ws_config: dict = None, **kwargs):
     """Runs a extrude application from a bunch of fucntions. It first run a web service
     application from those functions then runs a front applciation to consume these web
@@ -76,9 +75,7 @@ def run_app(funcs: Iterable[Callable], *, ws_config: dict = None, **kwargs):
     ws_config = ws_config or {}
 
     with run_process(
-        func=run_webservice,
-        func_kwargs=dict(app_obj=funcs, **ws_config),
-        is_ready=3,
+        func=run_webservice, func_kwargs=dict(app_obj=funcs, **ws_config), is_ready=3,
     ):
         ws = mk_webservice(funcs)
         func_names = [name_of_obj(func) for func in funcs]
@@ -101,9 +98,5 @@ if __name__ == '__main__':
     func_names = json.loads(argv[2])
     kwargs = json.loads(argv[3])
 
-    app = mk_app(
-        openapi_spec=openapi_spec,
-        func_names=func_names,
-        **kwargs,
-    )
+    app = mk_app(openapi_spec=openapi_spec, func_names=func_names, **kwargs,)
     app()
