@@ -58,11 +58,7 @@ def mk_app(
         return flat_func
 
     if funcs:
-        ws_config = dict(
-            openapi=dict(
-                base_url=api_url
-            )
-        ) if api_url else {}
+        ws_config = dict(openapi=dict(base_url=api_url)) if api_url else {}
         ws = mk_webservice(funcs, **ws_config)
         openapi_spec = ws.openapi_spec
         func_names = [name_of_obj(func) for func in funcs]
