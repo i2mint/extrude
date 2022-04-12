@@ -12,9 +12,11 @@ from py2http.util import run_process
 from streamlitfront.base import dispatch_funcs
 
 
+# TODO: Maybe split this function in two, by adding mk_app_from_openapi_spec
 def mk_app(
     funcs: Iterable[Callable] = None,
     *,
+    api_url: str = None,
     openapi_spec: dict = None,
     func_names: Iterable[str] = None,
     **kwargs
@@ -26,8 +28,11 @@ def mk_app(
 
     :param funcs: A list of functions. Overwrites ``openapi_spec`` and ``func_names``
     if not None.
-    :param openapi_spec: A web service openapi specification.
+    :param api_url: The base url of the API. Only used if ``funcs`` is not None.
+    :param openapi_spec: A web service openapi specification. Ignored if ``funcs``
+    is not None.
     :param func_names: A list of function names to pick from the openapi specification.
+    Ignored if ``funcs`` is not None.
     :param kwargs: Any extra keyword argument used to make the front application.
 
     >>> def foo():
@@ -53,7 +58,12 @@ def mk_app(
         return flat_func
 
     if funcs:
-        ws = mk_webservice(funcs)
+        ws_config = dict(
+            openapi=dict(
+                base_url=api_url
+            )
+        ) if api_url else {}
+        ws = mk_webservice(funcs, **ws_config)
         openapi_spec = ws.openapi_spec
         func_names = [name_of_obj(func) for func in funcs]
     api = HttpClient(openapi_spec=openapi_spec)
