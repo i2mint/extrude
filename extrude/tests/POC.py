@@ -1,4 +1,4 @@
-from extrude.run_app import run_app_from_funcs
+from extrude.base import run_app_from_funcs
 
 
 def foo(a: int = 0, b: int = 0, c=0):
