@@ -1,4 +1,4 @@
-from extrude.base import run_app_from_funcs
+# from extrude.base import run_app_from_funcs
 
 
 def foo(a: int = 0, b: int = 0, c=0):
@@ -18,5 +18,5 @@ def confuser(a: int = 0, x: float = 3.14):
 funcs = [foo, bar, confuser]
 
 
-if __name__ == '__main__':
-    run_app_from_funcs(funcs)
+# if __name__ == '__main__':
+#     run_app_from_funcs(funcs)
