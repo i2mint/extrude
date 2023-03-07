@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>extrude.crude &mdash; extrude 0.1.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>extrude.crude &mdash; extrude 0.1.7 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -22,7 +22,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="Welcome to extrude’s documentation!" href="../../index.html" /> 
+    <link rel="next" title="extrude.examples.example_apps_simple.example_app_1" href="examples/example_apps_simple/example_app_1.html" />
+    <link rel="prev" title="extrude.base" href="base.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -30,11 +31,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> extrude
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            extrude
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,7 +47,18 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../extrude.html">extrude</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">extrude.base</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">extrude.crude</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/example_apps_simple/example_app_1.html">extrude.examples.example_apps_simple.example_app_1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/example_apps_simple/example_app_2.html">extrude.examples.example_apps_simple.example_app_2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/example_apps_simple/streamlit_house_app.html">extrude.examples.example_apps_simple.streamlit_house_app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/multi_apps_complex.html">extrude.examples.multi_apps_complex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/multi_apps_simple.html">extrude.examples.multi_apps_simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/nav_tester.html">extrude.examples.nav_tester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_app.html">extrude.multi_app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests/POC.html">extrude.tests.POC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">extrude.util</a></li>
 </ul>
 
         </div>
@@ -58,8 +74,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>extrude.crude</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">extrude.crude</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/module_docs/extrude/crude.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,78 +91,14 @@
 Wrap functions so that the complex arguments can be specified through a string key
 that points to the actual python object (which is stored in a session’s memory or
 persisted in some fashion).</p>
-<dl class="py class">
-<dt id="extrude.crude.DillFiles">
-<em class="property">class </em><code class="sig-prename descclassname">extrude.crude.</code><code class="sig-name descname">DillFiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/extrude/crude.html#DillFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extrude.crude.DillFiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serializes and deserializes with dill</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="extrude.crude.auto_key">
-<code class="sig-prename descclassname">extrude.crude.</code><code class="sig-name descname">auto_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/extrude/crude.html#auto_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extrude.crude.auto_key" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a str key from arguments.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">auto_key</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="go">&#39;1,2,c=3,d=4&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_key</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="go">&#39;1,2&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_key</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="go">&#39;c=3,d=4&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">auto_key</span><span class="p">()</span>
-<span class="go">&#39;&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt id="extrude.crude.mk_mall_of_dill_stores">
-<code class="sig-prename descclassname">extrude.crude.</code><code class="sig-name descname">mk_mall_of_dill_stores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">store_names</span><span class="o">=</span><span class="default_value">typing.Iterable[str]</span></em>, <em class="sig-param"><span class="n">rootdir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/extrude/crude.html#mk_mall_of_dill_stores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extrude.crude.mk_mall_of_dill_stores" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a mall of DillFiles stores</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="extrude.crude.prepare_for_crude_dispatch">
-<code class="sig-prename descclassname">extrude.crude.</code><code class="sig-name descname">prepare_for_crude_dispatch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">store_for_param</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Mapping<span class="p">[</span>str<span class="p">, </span>Mapping<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">output_store_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_name_param</span><span class="o">=</span><span class="default_value">'save_name'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/extrude/crude.html#prepare_for_crude_dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extrude.crude.prepare_for_crude_dispatch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrap func into something that is ready for CRUDE dispatch.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> – The function to wrap</p></li>
-<li><p><strong>store_for_param</strong> – </p></li>
-<li><p><strong>output_store_name</strong> – </p></li>
-</ul>
-</dd>
-</dl>
-<p># :param save_name_param:
-:return:</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="extrude.crude.store_on_output">
-<code class="sig-prename descclassname">extrude.crude.</code><code class="sig-name descname">store_on_output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">store</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save_name_param</span><span class="o">=</span><span class="default_value">'save_name'</span></em>, <em class="sig-param"><span class="n">add_store_to_func_attr</span><span class="o">=</span><span class="default_value">'output_store'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/extrude/crude.html#store_on_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#extrude.crude.store_on_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrap func so it will have an extra save_name_param that can be used to
-indicate whether to save the output of the function call to that key, in
-that store</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> – </p></li>
-<li><p><strong>store</strong> – </p></li>
-<li><p><strong>save_name_param</strong> – Name of the extra param</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../index.html" class="btn btn-neutral float-left" title="Welcome to extrude’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="base.html" class="btn btn-neutral float-left" title="extrude.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples/example_apps_simple/example_app_1.html" class="btn btn-neutral float-right" title="extrude.examples.example_apps_simple.example_app_1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

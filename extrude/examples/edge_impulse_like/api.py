@@ -13,8 +13,6 @@ if __name__ == '__main__':
         enable_cors=True,
         publish_openapi=True,
         publish_swagger=True,
-        openapi=dict(
-            base_url=f'http://localhost:{port}'
-        )
+        openapi=dict(base_url=f'http://localhost:{port}'),
     )
     run_webservice(funcs, **ws_config)
