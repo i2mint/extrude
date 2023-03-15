@@ -63,11 +63,11 @@ no way to get the list of valid keys for them. Make sure to expose the \
                     path = '.'.join(
                         [RENDERING_KEY, func_name, 'execution', 'inputs', param]
                     )
-                    value = {
-                        ELEMENT_KEY: SelectBox,
-                        'options': list(light_mall.get(store, {})),
-                    }
-                    glom.assign(config, path, value, missing=dict)
+                    param_config = glom.glom(config, path, default={})
+                    if ELEMENT_KEY not in param_config:
+                        param_config[ELEMENT_KEY] = SelectBox
+                        param_config['options'] = list(light_mall.get(store, {}))
+                        glom.assign(config, path, param_config, missing=dict)
             kwargs['config'] = config
 
     openapi_spec_url = urljoin(api_url, 'openapi')
