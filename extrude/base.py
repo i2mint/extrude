@@ -22,12 +22,14 @@ from extrude.util import SubDagSpec, split_dag
 PARAM_TO_MALL_MAP_ATTR = 'param_to_mall_map'
 
 
-def mk_web_app(funcs: Iterable[Callable], *, api_url: str = None, **kwargs):
+def mk_web_app(funcs: Iterable[Callable], *, api: HttpClient = None, api_url: str = None, **kwargs):
     """Generates a front application which will consume a web service exposing a bunch
     of functions.
 
     :param funcs: A list of functions.
-    :param api_url: The base url of the API.
+    :param api: The HttpClient object to consume the API.
+    :param api_url: The base url of the API to create a HttpClient object in case the 
+    `api` parameter is not provided. Ignored otherwise
     :param kwargs: Any extra keyword argument used to make the front application.
     """
 
@@ -70,8 +72,9 @@ no way to get the list of valid keys for them. Make sure to expose the \
                         glom.assign(config, path, param_config, missing=dict)
             kwargs['config'] = config
 
-    openapi_spec_url = urljoin(api_url, 'openapi')
-    api = HttpClient(url=openapi_spec_url)
+    if not api:
+        openapi_spec_url = urljoin(api_url, 'openapi')
+        api = HttpClient(url=openapi_spec_url)
     func_names = [name_of_obj(func) for func in funcs]
     ws_funcs = [flatten_api_meth(getattr(api, name)) for name in func_names]
     handle_crudified_params()
@@ -104,15 +107,15 @@ def mk_api(funcs: Iterable[Callable], mall: Optional[Mall] = None, **kwargs):
 
         funcs = funcs + [get_light_mall]
 
-    ws_config = dict(
+    dflt_config = dict(
         protocol='http',
         host='localhost',
         port='3030',
         enable_cors=True,
         publish_openapi=True,
         publish_swagger=True,
-        **kwargs,
     )
+    ws_config = dict(dflt_config, **kwargs)
 
     if 'openapi' not in ws_config:
         protocol = ws_config['protocol']
