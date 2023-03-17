@@ -22,7 +22,9 @@ from extrude.util import SubDagSpec, split_dag
 PARAM_TO_MALL_MAP_ATTR = 'param_to_mall_map'
 
 
-def mk_web_app(funcs: Iterable[Callable], *, api: HttpClient = None, api_url: str = None, **kwargs):
+def mk_web_app(
+    funcs: Iterable[Callable], *, api: HttpClient = None, api_url: str = None, **kwargs
+):
     """Generates a front application which will consume a web service exposing a bunch
     of functions.
 
