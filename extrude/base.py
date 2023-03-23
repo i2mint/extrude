@@ -128,5 +128,5 @@ def mk_api(funcs: Iterable[Callable], mall: Optional[Mall] = None, **kwargs):
     return mk_webservice(funcs, **ws_config)
 
 
-def run_api(app):
-    run_webservice(app)
+def run_api(app, **kwargs):
+    run_webservice(app, **kwargs)
