@@ -54,13 +54,6 @@ def mk_web_app(
 
         crude_config = {k: v for k, v in build_crude_config()}
         if crude_config:
-            if not hasattr(api, 'get_light_mall'):
-                raise RuntimeError(
-                    'Some parameters have been crudified but there is \
-no way to get the list of valid keys for them. Make sure to expose the \
-"get_light_mall" endpoint through the API'
-                )
-            light_mall = api.get_light_mall()
             config = kwargs.get('config', {})
             for func_name, param_to_mall_map in crude_config.items():
                 for param, store in param_to_mall_map.items():
@@ -69,8 +62,12 @@ no way to get the list of valid keys for them. Make sure to expose the \
                     )
                     param_config = glom.glom(config, path, default={})
                     if ELEMENT_KEY not in param_config:
+                        if not hasattr(api, 'get_store_keys'):
+                            raise RuntimeError(
+                                'Some parameters have been crudified but there is no way to get the list of valid keys for them. Make sure to expose the "get_store_keys" endpoint through the API'
+                            )
                         param_config[ELEMENT_KEY] = SelectBox
-                        param_config['options'] = list(light_mall.get(store, {}))
+                        param_config['options'] = api.get_store_keys(store)
                         glom.assign(config, path, param_config, missing=dict)
             kwargs['config'] = config
 
@@ -98,16 +95,16 @@ def mk_api(funcs: Iterable[Callable], mall: Optional[Mall] = None, **kwargs):
 
     if mall is not None:
 
-        def get_light_mall():
-            def remove_values(node):
+        def get_store_keys(store_name_: str = None):
+            if store_name_ is None:
                 return {
-                    k: (remove_values(v) if isinstance(v, Mapping) else None)
-                    for k, v in node.items()
+                    k: get_store_keys(k) for k in mall
                 }
+            if store_name_ not in mall:
+                raise ValueError(f'No store named "{store_name_}"')
+            return list(mall[store_name_])
 
-            return remove_values(mall)
-
-        funcs = funcs + [get_light_mall]
+        funcs = funcs + [get_store_keys]
 
     dflt_config = dict(
         protocol='http',
