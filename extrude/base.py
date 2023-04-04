@@ -97,9 +97,7 @@ def mk_api(funcs: Iterable[Callable], mall: Optional[Mall] = None, **kwargs):
 
         def get_store_keys(store_name_: str = None):
             if store_name_ is None:
-                return {
-                    k: get_store_keys(k) for k in mall
-                }
+                return {k: get_store_keys(k) for k in mall}
             if store_name_ not in mall:
                 raise ValueError(f'No store named "{store_name_}"')
             return list(mall[store_name_])
