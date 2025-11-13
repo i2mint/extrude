@@ -1,6 +1,7 @@
 import json
 from functools import wraps
-from typing import Callable, Iterable, Mapping, Optional
+from typing import Optional
+from collections.abc import Callable, Iterable, Mapping
 from urllib.parse import urljoin
 import glom
 
@@ -81,7 +82,7 @@ def mk_web_app(
     return mk_front_app(ws_funcs, **kwargs)
 
 
-def mk_api(funcs: Iterable[Callable], mall: Optional[Mall] = None, **kwargs):
+def mk_api(funcs: Iterable[Callable], mall: Mall | None = None, **kwargs):
     """Generates a py2http application with default configuration for extrude.
 
     :param funcs: A list of functions.

@@ -1,4 +1,5 @@
-from typing import Iterable, Mapping, Union
+from typing import Union
+from collections.abc import Iterable, Mapping
 from meshed import DAG
 
 SubDagSpec = Mapping[str, Iterable[Union[Iterable[str], str]]]

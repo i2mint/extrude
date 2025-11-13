@@ -8,7 +8,7 @@ import os
 from functools import partial
 from pathlib import Path
 import streamlit as st
-from typing import Iterable
+from collections.abc import Iterable
 import importlib.util
 import sys
 import types
