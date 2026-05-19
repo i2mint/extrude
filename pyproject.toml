@@ -20,6 +20,7 @@ dependencies = [
     "http2py",
     "streamlitfront",
     "front",
+    "glom",
 ]
 
 [project.license]
@@ -54,9 +55,7 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = [
-    "D100",
-]
+select = []
 ignore = [
     "D203",
     "E501",
