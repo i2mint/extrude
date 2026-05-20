@@ -15,8 +15,8 @@ import types
 
 from streamlitfront.base import dispatch_funcs
 
-ROOT_APP = '__extrude_root__'
-EXTRUDE_FUNCS = 'extrude_funcs'
+ROOT_APP = "__extrude_root__"
+EXTRUDE_FUNCS = "extrude_funcs"
 
 
 def execute_module_spec(spec):
@@ -44,17 +44,17 @@ def get_module_spec_from_pathname(pathname: str):
     """Creates an instance of importlib.machinery.ModuleSpec from a path."""
     module_name = os.path.basename(os.path.normpath(pathname))
     if os.path.isdir(pathname):
-        pathname = os.path.join(pathname, '__init__.py')
+        pathname = os.path.join(pathname, "__init__.py")
     return importlib.util.spec_from_file_location(module_name, pathname)
 
 
 def set_current_module(app_name):
-    st.session_state['current_app'] = app_name
+    st.session_state["current_app"] = app_name
 
 
 def render_root_nav(app_name_mapping: dict):
-    st.set_page_config(layout='centered')
-    st.header('Choose an app')
+    st.set_page_config(layout="centered")
+    st.header("Choose an app")
     for app_name, display_name in app_name_mapping.items():
         st.button(
             key=app_name,
@@ -64,7 +64,7 @@ def render_root_nav(app_name_mapping: dict):
 
 
 def mk_dflt_dispatch(module, configs):
-    funcs = getattr(module, configs.get('funcs_to_dispatch', EXTRUDE_FUNCS), [])
+    funcs = getattr(module, configs.get("funcs_to_dispatch", EXTRUDE_FUNCS), [])
 
     def dispatch():
         return dispatch_funcs(funcs, configs=configs)
@@ -94,20 +94,20 @@ def dispatch_child_apps(pathnames: Iterable[str], configs: dict = None):
 
     def get_display_name(spec):
         module_config = configs.get(spec.name, configs)
-        return module_config.get('display_name', spec.name)
+        return module_config.get("display_name", spec.name)
 
     app_name_mapping = {spec.name: get_display_name(spec) for spec in module_specs}
     module_mapping = {spec.name: spec for spec in module_specs}
-    if 'current_app' not in st.session_state:
-        st.session_state['current_app'] = ROOT_APP
+    if "current_app" not in st.session_state:
+        st.session_state["current_app"] = ROOT_APP
 
-    current_app_name = st.session_state['current_app']
+    current_app_name = st.session_state["current_app"]
     if current_app_name == ROOT_APP:
         return render_root_nav(app_name_mapping)
 
     current_module_spec = module_mapping[current_app_name]
     config_for_module = configs.get(current_app_name, configs)
-    app = config_for_module.get('app', None)
+    app = config_for_module.get("app", None)
     if not app:
         app = dispatch_raw_module(current_module_spec)
     current_module = execute_module_spec(current_module_spec)
@@ -115,7 +115,7 @@ def dispatch_child_apps(pathnames: Iterable[str], configs: dict = None):
         app = getattr(current_module, app, config_for_module.get(app, None))
     if not callable(app):
         dispatch = config_for_module.get(
-            'dispatch', mk_dflt_dispatch(current_module, config_for_module)
+            "dispatch", mk_dflt_dispatch(current_module, config_for_module)
         )
         if isinstance(dispatch, str):
             dispatch = getattr(current_module, dispatch)
@@ -125,8 +125,8 @@ def dispatch_child_apps(pathnames: Iterable[str], configs: dict = None):
     except Exception as error:
         st.error(str(error))
     st.sidebar.button(
-        label='Back to root',
-        key='backtoroot',
+        label="Back to root",
+        key="backtoroot",
         on_click=lambda: set_current_module(ROOT_APP),
     )
 
@@ -139,8 +139,8 @@ def dispatch_child_apps_from_root(root_dir: str, configs: dict = None):
     """
     root_pathname = os.path.abspath(root_dir)
     if not os.path.isdir(root_pathname):
-        raise ValueError(f'{root_dir} is not a path to a directory.')
-    children = [path for path in os.listdir(root_pathname) if not path.startswith('__')]
+        raise ValueError(f"{root_dir} is not a path to a directory.")
+    children = [path for path in os.listdir(root_pathname) if not path.startswith("__")]
     child_paths = [os.path.join(root_pathname, child) for child in children]
     return dispatch_child_apps(child_paths, configs)
 
@@ -162,5 +162,5 @@ def dispatch_child_apps_from_module(
     root_filename = root_module.__file__
     root_dir = Path(root_filename).parent.absolute()
     return dispatch_child_apps_from_root(
-        str(root_dir).replace('__pycache__/', ''), configs
+        str(root_dir).replace("__pycache__/", ""), configs
     )

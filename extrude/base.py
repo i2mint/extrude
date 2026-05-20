@@ -20,7 +20,7 @@ from streamlitfront.elements import SelectBox
 
 from extrude.util import SubDagSpec, split_dag
 
-PARAM_TO_MALL_MAP_ATTR = 'param_to_mall_map'
+PARAM_TO_MALL_MAP_ATTR = "param_to_mall_map"
 
 
 def mk_web_app(
@@ -31,13 +31,13 @@ def mk_web_app(
 
     :param funcs: A list of functions.
     :param api: The HttpClient object to consume the API.
-    :param api_url: The base url of the API to create a HttpClient object in case the 
+    :param api_url: The base url of the API to create a HttpClient object in case the
     `api` parameter is not provided. Ignored otherwise
     :param kwargs: Any extra keyword argument used to make the front application.
     """
 
     def flatten_api_meth(meth):
-        sig = Sig(meth) - 'self'
+        sig = Sig(meth) - "self"
 
         @sig
         @wraps(meth)
@@ -55,25 +55,25 @@ def mk_web_app(
 
         crude_config = {k: v for k, v in build_crude_config()}
         if crude_config:
-            config = kwargs.get('config', {})
+            config = kwargs.get("config", {})
             for func_name, param_to_mall_map in crude_config.items():
                 for param, store in param_to_mall_map.items():
-                    path = '.'.join(
-                        [RENDERING_KEY, func_name, 'execution', 'inputs', param]
+                    path = ".".join(
+                        [RENDERING_KEY, func_name, "execution", "inputs", param]
                     )
                     param_config = glom.glom(config, path, default={})
                     if ELEMENT_KEY not in param_config:
-                        if not hasattr(api, 'get_store_keys'):
+                        if not hasattr(api, "get_store_keys"):
                             raise RuntimeError(
                                 'Some parameters have been crudified but there is no way to get the list of valid keys for them. Make sure to expose the "get_store_keys" endpoint through the API'
                             )
                         param_config[ELEMENT_KEY] = SelectBox
-                        param_config['options'] = api.get_store_keys(store)
+                        param_config["options"] = api.get_store_keys(store)
                         glom.assign(config, path, param_config, missing=dict)
-            kwargs['config'] = config
+            kwargs["config"] = config
 
     if not api:
-        openapi_spec_url = urljoin(api_url, 'openapi')
+        openapi_spec_url = urljoin(api_url, "openapi")
         api = HttpClient(url=openapi_spec_url)
     func_names = [name_of_obj(func) for func in funcs]
     ws_funcs = [flatten_api_meth(getattr(api, name)) for name in func_names]
@@ -106,20 +106,20 @@ def mk_api(funcs: Iterable[Callable], mall: Mall | None = None, **kwargs):
         funcs = funcs + [get_store_keys]
 
     dflt_config = dict(
-        protocol='http',
-        host='localhost',
-        port='3030',
+        protocol="http",
+        host="localhost",
+        port="3030",
         enable_cors=True,
         publish_openapi=True,
         publish_swagger=True,
     )
     ws_config = dict(dflt_config, **kwargs)
 
-    if 'openapi' not in ws_config:
-        protocol = ws_config['protocol']
-        host = ws_config['host']
-        port = ws_config['port']
-        ws_config['openapi'] = dict(base_url=f'{protocol}://{host}:{port}')
+    if "openapi" not in ws_config:
+        protocol = ws_config["protocol"]
+        host = ws_config["host"]
+        port = ws_config["port"]
+        ws_config["openapi"] = dict(base_url=f"{protocol}://{host}:{port}")
 
     return mk_webservice(funcs, **ws_config)
 
