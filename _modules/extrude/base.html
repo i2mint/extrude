@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>extrude.base &mdash; extrude 0.1.12 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            extrude
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude.html">extrude</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/base.html">extrude.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/crude.html">extrude.crude</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/examples/example_apps_simple/example_app_1.html">extrude.examples.example_apps_simple.example_app_1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/examples/example_apps_simple/example_app_2.html">extrude.examples.example_apps_simple.example_app_2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/examples/example_apps_simple/streamlit_house_app.html">extrude.examples.example_apps_simple.streamlit_house_app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/examples/multi_apps_complex.html">extrude.examples.multi_apps_complex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/examples/multi_apps_simple.html">extrude.examples.multi_apps_simple</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/examples/nav_tester.html">extrude.examples.nav_tester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/multi_app.html">extrude.multi_app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/tests/POC.html">extrude.tests.POC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/extrude/util.html">extrude.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">extrude</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">extrude.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for extrude.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urljoin</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glom</span>
+
+<span class="c1"># import streamlit.bootstrap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">http2py</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">i2</span><span class="w"> </span><span class="kn">import</span> <span class="n">name_of_obj</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">i2.wrapper</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">py2http</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_app</span> <span class="k">as</span> <span class="n">mk_webservice</span><span class="p">,</span> <span class="n">run_app</span> <span class="k">as</span> <span class="n">run_webservice</span>
+
+<span class="c1"># from py2http.util import run_process</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">streamlitfront.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_app</span> <span class="k">as</span> <span class="n">mk_front_app</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meshed</span><span class="w"> </span><span class="kn">import</span> <span class="n">DAG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">front.crude</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mall</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">front</span><span class="w"> </span><span class="kn">import</span> <span class="n">RENDERING_KEY</span><span class="p">,</span> <span class="n">ELEMENT_KEY</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">streamlitfront.elements</span><span class="w"> </span><span class="kn">import</span> <span class="n">SelectBox</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">extrude.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">SubDagSpec</span><span class="p">,</span> <span class="n">split_dag</span>
+
+<span class="n">PARAM_TO_MALL_MAP_ATTR</span> <span class="o">=</span> <span class="s1">&#39;param_to_mall_map&#39;</span>
+
+
+<div class="viewcode-block" id="mk_web_app">
+<a class="viewcode-back" href="../../module_docs/extrude/base.html#extrude.base.mk_web_app">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mk_web_app</span><span class="p">(</span>
+    <span class="n">funcs</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">HttpClient</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">api_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a front application which will consume a web service exposing a bunch</span>
+<span class="sd">    of functions.</span>
+
+<span class="sd">    :param funcs: A list of functions.</span>
+<span class="sd">    :param api: The HttpClient object to consume the API.</span>
+<span class="sd">    :param api_url: The base url of the API to create a HttpClient object in case the </span>
+<span class="sd">    `api` parameter is not provided. Ignored otherwise</span>
+<span class="sd">    :param kwargs: Any extra keyword argument used to make the front application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">flatten_api_meth</span><span class="p">(</span><span class="n">meth</span><span class="p">):</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span> <span class="o">-</span> <span class="s1">&#39;self&#39;</span>
+
+        <span class="nd">@sig</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">flat_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">meth</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">flat_func</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_crudified_params</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">build_crude_config</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">:</span>
+                <span class="n">param_to_mall_map</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">PARAM_TO_MALL_MAP_ATTR</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">param_to_mall_map</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">name_of_obj</span><span class="p">(</span><span class="n">func</span><span class="p">),</span> <span class="n">param_to_mall_map</span>
+
+        <span class="n">crude_config</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">build_crude_config</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="n">crude_config</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">param_to_mall_map</span> <span class="ow">in</span> <span class="n">crude_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">store</span> <span class="ow">in</span> <span class="n">param_to_mall_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">RENDERING_KEY</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="s1">&#39;execution&#39;</span><span class="p">,</span> <span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">param_config</span> <span class="o">=</span> <span class="n">glom</span><span class="o">.</span><span class="n">glom</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">{})</span>
+                    <span class="k">if</span> <span class="n">ELEMENT_KEY</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param_config</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s1">&#39;get_store_keys&#39;</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                                <span class="s1">&#39;Some parameters have been crudified but there is no way to get the list of valid keys for them. Make sure to expose the &quot;get_store_keys&quot; endpoint through the API&#39;</span>
+                            <span class="p">)</span>
+                        <span class="n">param_config</span><span class="p">[</span><span class="n">ELEMENT_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">SelectBox</span>
+                        <span class="n">param_config</span><span class="p">[</span><span class="s1">&#39;options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_store_keys</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+                        <span class="n">glom</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">param_config</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">api</span><span class="p">:</span>
+        <span class="n">openapi_spec_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="s1">&#39;openapi&#39;</span><span class="p">)</span>
+        <span class="n">api</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">openapi_spec_url</span><span class="p">)</span>
+    <span class="n">func_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name_of_obj</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">]</span>
+    <span class="n">ws_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">flatten_api_meth</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">func_names</span><span class="p">]</span>
+    <span class="n">handle_crudified_params</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">mk_front_app</span><span class="p">(</span><span class="n">ws_funcs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mk_api">
+<a class="viewcode-back" href="../../module_docs/extrude/base.html#extrude.base.mk_api">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mk_api</span><span class="p">(</span><span class="n">funcs</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span> <span class="n">mall</span><span class="p">:</span> <span class="n">Mall</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a py2http application with default configuration for extrude.</span>
+
+<span class="sd">    :param funcs: A list of functions.</span>
+<span class="sd">    :param kwargs: Any extra keyword argument used to make the py2http application.</span>
+
+<span class="sd">    &gt;&gt;&gt; def foo():</span>
+<span class="sd">    ...     pass</span>
+<span class="sd">    ...</span>
+<span class="sd">    &gt;&gt;&gt; app = mk_api([foo])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mall</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">get_store_keys</span><span class="p">(</span><span class="n">store_name_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">store_name_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">get_store_keys</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mall</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">store_name_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mall</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No store named &quot;</span><span class="si">{</span><span class="n">store_name_</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">mall</span><span class="p">[</span><span class="n">store_name_</span><span class="p">])</span>
+
+        <span class="n">funcs</span> <span class="o">=</span> <span class="n">funcs</span> <span class="o">+</span> <span class="p">[</span><span class="n">get_store_keys</span><span class="p">]</span>
+
+    <span class="n">dflt_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">protocol</span><span class="o">=</span><span class="s1">&#39;http&#39;</span><span class="p">,</span>
+        <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="s1">&#39;3030&#39;</span><span class="p">,</span>
+        <span class="n">enable_cors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">publish_openapi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">publish_swagger</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ws_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">dflt_config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;openapi&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ws_config</span><span class="p">:</span>
+        <span class="n">protocol</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;protocol&#39;</span><span class="p">]</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span>
+        <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;openapi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">protocol</span><span class="si">}</span><span class="s1">://</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mk_webservice</span><span class="p">(</span><span class="n">funcs</span><span class="p">,</span> <span class="o">**</span><span class="n">ws_config</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_api</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">run_webservice</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
