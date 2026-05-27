@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>extrude.base &mdash; extrude 0.1.12 documentation</title>
+  <title>extrude.base &mdash; extrude 0.1.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=297ad043"></script>
+      <script src="../../_static/documentation_options.js?v=8d02545a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -107,7 +107,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">extrude.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">SubDagSpec</span><span class="p">,</span> <span class="n">split_dag</span>
 
-<span class="n">PARAM_TO_MALL_MAP_ATTR</span> <span class="o">=</span> <span class="s1">&#39;param_to_mall_map&#39;</span>
+<span class="n">PARAM_TO_MALL_MAP_ATTR</span> <span class="o">=</span> <span class="s2">&quot;param_to_mall_map&quot;</span>
 
 
 <div class="viewcode-block" id="mk_web_app">
@@ -120,13 +120,13 @@
 
 <span class="sd">    :param funcs: A list of functions.</span>
 <span class="sd">    :param api: The HttpClient object to consume the API.</span>
-<span class="sd">    :param api_url: The base url of the API to create a HttpClient object in case the </span>
+<span class="sd">    :param api_url: The base url of the API to create a HttpClient object in case the</span>
 <span class="sd">    `api` parameter is not provided. Ignored otherwise</span>
 <span class="sd">    :param kwargs: Any extra keyword argument used to make the front application.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">flatten_api_meth</span><span class="p">(</span><span class="n">meth</span><span class="p">):</span>
-        <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span> <span class="o">-</span> <span class="s1">&#39;self&#39;</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">Sig</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span> <span class="o">-</span> <span class="s2">&quot;self&quot;</span>
 
         <span class="nd">@sig</span>
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span>
@@ -144,25 +144,25 @@
 
         <span class="n">crude_config</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">build_crude_config</span><span class="p">()}</span>
         <span class="k">if</span> <span class="n">crude_config</span><span class="p">:</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="p">{})</span>
             <span class="k">for</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">param_to_mall_map</span> <span class="ow">in</span> <span class="n">crude_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">store</span> <span class="ow">in</span> <span class="n">param_to_mall_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="p">[</span><span class="n">RENDERING_KEY</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="s1">&#39;execution&#39;</span><span class="p">,</span> <span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">RENDERING_KEY</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="s2">&quot;execution&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span>
                     <span class="p">)</span>
                     <span class="n">param_config</span> <span class="o">=</span> <span class="n">glom</span><span class="o">.</span><span class="n">glom</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">{})</span>
                     <span class="k">if</span> <span class="n">ELEMENT_KEY</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param_config</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s1">&#39;get_store_keys&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s2">&quot;get_store_keys&quot;</span><span class="p">):</span>
                             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                                 <span class="s1">&#39;Some parameters have been crudified but there is no way to get the list of valid keys for them. Make sure to expose the &quot;get_store_keys&quot; endpoint through the API&#39;</span>
                             <span class="p">)</span>
                         <span class="n">param_config</span><span class="p">[</span><span class="n">ELEMENT_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">SelectBox</span>
-                        <span class="n">param_config</span><span class="p">[</span><span class="s1">&#39;options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_store_keys</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+                        <span class="n">param_config</span><span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_store_keys</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
                         <span class="n">glom</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">param_config</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">api</span><span class="p">:</span>
-        <span class="n">openapi_spec_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="s1">&#39;openapi&#39;</span><span class="p">)</span>
+        <span class="n">openapi_spec_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="s2">&quot;openapi&quot;</span><span class="p">)</span>
         <span class="n">api</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">openapi_spec_url</span><span class="p">)</span>
     <span class="n">func_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name_of_obj</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">]</span>
     <span class="n">ws_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">flatten_api_meth</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">func_names</span><span class="p">]</span>
@@ -198,20 +198,20 @@
         <span class="n">funcs</span> <span class="o">=</span> <span class="n">funcs</span> <span class="o">+</span> <span class="p">[</span><span class="n">get_store_keys</span><span class="p">]</span>
 
     <span class="n">dflt_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">protocol</span><span class="o">=</span><span class="s1">&#39;http&#39;</span><span class="p">,</span>
-        <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
-        <span class="n">port</span><span class="o">=</span><span class="s1">&#39;3030&#39;</span><span class="p">,</span>
+        <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;http&quot;</span><span class="p">,</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="s2">&quot;3030&quot;</span><span class="p">,</span>
         <span class="n">enable_cors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">publish_openapi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">publish_swagger</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ws_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">dflt_config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s1">&#39;openapi&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ws_config</span><span class="p">:</span>
-        <span class="n">protocol</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;protocol&#39;</span><span class="p">]</span>
-        <span class="n">host</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
-        <span class="n">port</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span>
-        <span class="n">ws_config</span><span class="p">[</span><span class="s1">&#39;openapi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">protocol</span><span class="si">}</span><span class="s1">://</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;openapi&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ws_config</span><span class="p">:</span>
+        <span class="n">protocol</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">]</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s2">&quot;host&quot;</span><span class="p">]</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="n">ws_config</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span>
+        <span class="n">ws_config</span><span class="p">[</span><span class="s2">&quot;openapi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">protocol</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mk_webservice</span><span class="p">(</span><span class="n">funcs</span><span class="p">,</span> <span class="o">**</span><span class="n">ws_config</span><span class="p">)</span></div>
 

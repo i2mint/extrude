@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>extrude.multi_app &mdash; extrude 0.1.12 documentation</title>
+  <title>extrude.multi_app &mdash; extrude 0.1.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=297ad043"></script>
+      <script src="../../_static/documentation_options.js?v=8d02545a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -102,8 +102,8 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">streamlitfront.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">dispatch_funcs</span>
 
-<span class="n">ROOT_APP</span> <span class="o">=</span> <span class="s1">&#39;__extrude_root__&#39;</span>
-<span class="n">EXTRUDE_FUNCS</span> <span class="o">=</span> <span class="s1">&#39;extrude_funcs&#39;</span>
+<span class="n">ROOT_APP</span> <span class="o">=</span> <span class="s2">&quot;__extrude_root__&quot;</span>
+<span class="n">EXTRUDE_FUNCS</span> <span class="o">=</span> <span class="s2">&quot;extrude_funcs&quot;</span>
 
 
 <div class="viewcode-block" id="execute_module_spec">
@@ -139,18 +139,18 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates an instance of importlib.machinery.ModuleSpec from a path.&quot;&quot;&quot;</span>
     <span class="n">module_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">pathname</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">pathname</span><span class="p">):</span>
-        <span class="n">pathname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="s1">&#39;__init__.py&#39;</span><span class="p">)</span>
+        <span class="n">pathname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="s2">&quot;__init__.py&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">pathname</span><span class="p">)</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">set_current_module</span><span class="p">(</span><span class="n">app_name</span><span class="p">):</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;current_app&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app_name</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_app&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app_name</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">render_root_nav</span><span class="p">(</span><span class="n">app_name_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s1">&#39;centered&#39;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s1">&#39;Choose an app&#39;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;centered&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s2">&quot;Choose an app&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">app_name</span><span class="p">,</span> <span class="n">display_name</span> <span class="ow">in</span> <span class="n">app_name_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span>
             <span class="n">key</span><span class="o">=</span><span class="n">app_name</span><span class="p">,</span>
@@ -160,7 +160,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">mk_dflt_dispatch</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">configs</span><span class="p">):</span>
-    <span class="n">funcs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;funcs_to_dispatch&#39;</span><span class="p">,</span> <span class="n">EXTRUDE_FUNCS</span><span class="p">),</span> <span class="p">[])</span>
+    <span class="n">funcs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;funcs_to_dispatch&quot;</span><span class="p">,</span> <span class="n">EXTRUDE_FUNCS</span><span class="p">),</span> <span class="p">[])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">dispatch</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">dispatch_funcs</span><span class="p">(</span><span class="n">funcs</span><span class="p">,</span> <span class="n">configs</span><span class="o">=</span><span class="n">configs</span><span class="p">)</span>
@@ -192,20 +192,20 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_display_name</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
         <span class="n">module_config</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">configs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">module_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;display_name&#39;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">module_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;display_name&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="n">app_name_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">get_display_name</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">module_specs</span><span class="p">}</span>
     <span class="n">module_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">spec</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">module_specs</span><span class="p">}</span>
-    <span class="k">if</span> <span class="s1">&#39;current_app&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;current_app&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROOT_APP</span>
+    <span class="k">if</span> <span class="s2">&quot;current_app&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_app&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROOT_APP</span>
 
-    <span class="n">current_app_name</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;current_app&#39;</span><span class="p">]</span>
+    <span class="n">current_app_name</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s2">&quot;current_app&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">current_app_name</span> <span class="o">==</span> <span class="n">ROOT_APP</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">render_root_nav</span><span class="p">(</span><span class="n">app_name_mapping</span><span class="p">)</span>
 
     <span class="n">current_module_spec</span> <span class="o">=</span> <span class="n">module_mapping</span><span class="p">[</span><span class="n">current_app_name</span><span class="p">]</span>
     <span class="n">config_for_module</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">current_app_name</span><span class="p">,</span> <span class="n">configs</span><span class="p">)</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">config_for_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">config_for_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">app</span><span class="p">:</span>
         <span class="n">app</span> <span class="o">=</span> <span class="n">dispatch_raw_module</span><span class="p">(</span><span class="n">current_module_spec</span><span class="p">)</span>
     <span class="n">current_module</span> <span class="o">=</span> <span class="n">execute_module_spec</span><span class="p">(</span><span class="n">current_module_spec</span><span class="p">)</span>
@@ -213,7 +213,7 @@
         <span class="n">app</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">current_module</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">config_for_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
         <span class="n">dispatch</span> <span class="o">=</span> <span class="n">config_for_module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s1">&#39;dispatch&#39;</span><span class="p">,</span> <span class="n">mk_dflt_dispatch</span><span class="p">(</span><span class="n">current_module</span><span class="p">,</span> <span class="n">config_for_module</span><span class="p">)</span>
+            <span class="s2">&quot;dispatch&quot;</span><span class="p">,</span> <span class="n">mk_dflt_dispatch</span><span class="p">(</span><span class="n">current_module</span><span class="p">,</span> <span class="n">config_for_module</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dispatch</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">dispatch</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">current_module</span><span class="p">,</span> <span class="n">dispatch</span><span class="p">)</span>
@@ -223,8 +223,8 @@
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
         <span class="n">st</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
     <span class="n">st</span><span class="o">.</span><span class="n">sidebar</span><span class="o">.</span><span class="n">button</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Back to root&#39;</span><span class="p">,</span>
-        <span class="n">key</span><span class="o">=</span><span class="s1">&#39;backtoroot&#39;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Back to root&quot;</span><span class="p">,</span>
+        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;backtoroot&quot;</span><span class="p">,</span>
         <span class="n">on_click</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">set_current_module</span><span class="p">(</span><span class="n">ROOT_APP</span><span class="p">),</span>
     <span class="p">)</span></div>
 
@@ -240,8 +240,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">root_pathname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">root_pathname</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">root_dir</span><span class="si">}</span><span class="s1"> is not a path to a directory.&#39;</span><span class="p">)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">root_pathname</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)]</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">root_dir</span><span class="si">}</span><span class="s2"> is not a path to a directory.&quot;</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">root_pathname</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)]</span>
     <span class="n">child_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_pathname</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">dispatch_child_apps</span><span class="p">(</span><span class="n">child_paths</span><span class="p">,</span> <span class="n">configs</span><span class="p">)</span></div>
 
@@ -266,7 +266,7 @@
     <span class="n">root_filename</span> <span class="o">=</span> <span class="n">root_module</span><span class="o">.</span><span class="vm">__file__</span>
     <span class="n">root_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_filename</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">dispatch_child_apps_from_root</span><span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;__pycache__/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="n">configs</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__pycache__/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">configs</span>
     <span class="p">)</span></div>
 
 </pre></div>
