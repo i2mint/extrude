@@ -1,3 +1,5 @@
+"""Utilities for specifying and splitting DAGs into sub-DAGs."""
+
 from typing import Union
 from collections.abc import Iterable, Mapping
 from meshed import DAG

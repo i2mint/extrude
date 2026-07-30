@@ -1,3 +1,5 @@
+"""Build composite web apps (webservice + streamlit front) from python functions."""
+
 import json
 from functools import wraps
 from typing import Optional
