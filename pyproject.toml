@@ -10,11 +10,33 @@ version = "0.1.14"
 description = "Tool to run a composite web application to easily interact with python functions"
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = []
-authors = []
+license = "Apache-2.0"
+keywords = [
+    "python",
+    "webapp",
+    "webclient",
+    "webservice",
+    "streamlit",
+    "ui",
+    "dag",
+    "dispatch",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+]
+authors = [{ name = "Thor Whalen" }]
 dependencies = [
     "i2",
     "dol",
+    "meshed",
     "dill",
     "py2http",
     "http2py",
@@ -22,9 +44,6 @@ dependencies = [
     "front",
     "glom",
 ]
-
-[project.license]
-text = "Apache-2.0"
 
 [project.urls]
 Homepage = "https://github.com/i2mint/extrude"
