@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-10-20T10:32:53Z",
+  "package": {
+    "name": "extrude",
+    "version": "0.1.15",
+    "display_name": "extrude",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "3bee525ee891c3d35cbd56ed5afece480622f8bd",
+    "short_commit": "3bee525",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/i2mint/extrude",
+    "commit_url": "https://github.com/i2mint/extrude/commit/3bee525ee891c3d35cbd56ed5afece480622f8bd",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "i2mint/extrude",
+    "sha": "3bee525ee891c3d35cbd56ed5afece480622f8bd",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "39408410697",
+    "run_url": "https://github.com/i2mint/extrude/actions/runs/39408410697",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.18",
+    "sphinx": "9.1.1",
+    "docutils": "0.22.4",
+    "python": "3.12.15"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "sphinxawesome_theme",
+    "accent": "#923521",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 6,
+    "objects_documented": 13
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.1.16",
+    "relation": "behind",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/i2mint/extrude && cd extrude\ngit checkout 3bee525ee891c3d35cbd56ed5afece480622f8bd\npip install \"epythet==0.2.18\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": false,
+    "notes": [
+      "The documented version (0.1.15) is behind the latest release on PyPI (0.1.16): `pip install extrude` gives newer code than these docs describe."
+    ]
+  }
+}

@@ -1,4 +1,0 @@
-extrude
-=======
-.. automodule:: extrude
-   :members:

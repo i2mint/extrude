@@ -1,0 +1,12 @@
+extrude.util
+============
+
+.. automodule:: extrude.util
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      split_dag
+   

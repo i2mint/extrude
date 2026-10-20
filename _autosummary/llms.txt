@@ -1,0 +1,17 @@
+# extrude
+
+> Tool to run a composite web application to easily interact with python functions
+
+
+## Pages in this subsection
+
+- [extrude](extrude.html.md): | &#96;base&#96;           | Build composite web apps (webservice + streamlit front) from python functions. ...
+- [extrude.base](extrude.base.html.md): Build composite web apps (webservice + streamlit front) from python functions.
+- [extrude.crude](extrude.crude.html.md): Control complex python object through strings.
+- [extrude.multi_app](extrude.multi_app.html.md): Entrypoint for dispatching multiple child applications with a navigation root.
+- [extrude.testing](extrude.testing.html.md): Run a test against an app in one call: start the app, wait until it answers, run the test, stop the ...
+- [extrude.util](extrude.util.html.md): Utilities for specifying and splitting DAGs into sub-DAGs.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

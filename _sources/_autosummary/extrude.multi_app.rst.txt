@@ -1,0 +1,20 @@
+extrude.multi\_app
+==================
+
+.. automodule:: extrude.multi_app
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      dispatch_child_apps
+      dispatch_child_apps_from_module
+      dispatch_child_apps_from_root
+      dispatch_raw_module
+      execute_module_spec
+      get_module_spec_from_pathname
+      mk_dflt_dispatch
+      render_root_nav
+      set_current_module
+   

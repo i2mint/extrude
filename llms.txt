@@ -1,0 +1,24 @@
+# extrude
+
+> Tool to run a composite web application to easily interact with python functions
+
+
+## Pages
+
+- [extrude](index.html.md): Tool to run a composite web application to easily interact with python functions
+- [API reference](api.html.md): | &#96;extrude&#96;   |    |
+- [extrude](_autosummary/extrude.html.md): | &#96;base&#96;           | Build composite web apps (webservice + streamlit front) from python functions. ...
+- [extrude.base](_autosummary/extrude.base.html.md): Build composite web apps (webservice + streamlit front) from python functions.
+- [extrude.crude](_autosummary/extrude.crude.html.md): Control complex python object through strings.
+- [extrude.multi_app](_autosummary/extrude.multi_app.html.md): Entrypoint for dispatching multiple child applications with a navigation root.
+- [extrude.testing](_autosummary/extrude.testing.html.md): Run a test against an app in one call: start the app, wait until it answers, run the test, stop the ...
+- [extrude.util](_autosummary/extrude.util.html.md): Utilities for specifying and splitting DAGs into sub-DAGs.
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 10:32 UTC&#42;&#42; from commit &lt;a href="https://github.com/i2m...
+
+## Optional
+
+- [extrude.md](extrude.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)
