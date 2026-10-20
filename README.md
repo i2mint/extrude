@@ -14,8 +14,10 @@ See [examples here](https://github.com/i2mint/extrude/tree/master/extrude/exampl
 ```python
 from extrude.testing import run_app_test
 
+
 def test(url):  # drive the page with selenium here
     ...
+
 
 run_app_test("my_app.py", test)
 ```

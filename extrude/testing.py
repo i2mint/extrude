@@ -107,7 +107,9 @@ def running_app(
     argv = list(command(app, port))
     popen_kwargs: dict[str, Any] = {"cwd": cwd, "env": {**os.environ, **(env or {})}}
     if os.name == "posix":
-        popen_kwargs["start_new_session"] = True  # own process group, so children stop with it
+        popen_kwargs["start_new_session"] = (
+            True  # own process group, so children stop with it
+        )
     else:  # pragma: no cover - windows
         popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
     with tempfile.TemporaryFile() as output:
@@ -119,15 +121,23 @@ def running_app(
                 if code is not None or time.monotonic() > deadline:
                     output.seek(0)
                     tail = output.read().decode(errors="replace")[-OUTPUT_TAIL_CHARS:]
-                    why = f"exited with code {code}" if code is not None else f"did not answer within {ready_timeout_s}s"
-                    raise RuntimeError(f"The app {why} ({' '.join(argv)}). Its output:\n{tail}")
+                    why = (
+                        f"exited with code {code}"
+                        if code is not None
+                        else f"did not answer within {ready_timeout_s}s"
+                    )
+                    raise RuntimeError(
+                        f"The app {why} ({' '.join(argv)}). Its output:\n{tail}"
+                    )
                 time.sleep(DFLT_POLL_S)
             yield f"http://{host}:{port}"
         finally:
             _stop(proc, grace_s=stop_grace_s)
 
 
-def run_app_test(app: Any, test: Callable[[str], Any] | str | Path, **running_app_kwargs: Any) -> Any:
+def run_app_test(
+    app: Any, test: Callable[[str], Any] | str | Path, **running_app_kwargs: Any
+) -> Any:
     """Start ``app``, run ``test`` against it, stop the app; return the test's result.
 
     :param test: a callable taking the app's URL (its return value is returned), or the path
@@ -147,14 +157,20 @@ def run_app_test(app: Any, test: Callable[[str], Any] | str | Path, **running_ap
 
 def main(argv: Sequence[str] | None = None) -> int:
     """``python -m extrude.testing APP TEST``: exit with the test script's exit code."""
-    parser = argparse.ArgumentParser(prog="python -m extrude.testing", description=__doc__.split("\n")[0])
+    parser = argparse.ArgumentParser(
+        prog="python -m extrude.testing", description=__doc__.split("\n")[0]
+    )
     parser.add_argument("app", help="the Streamlit script to serve")
-    parser.add_argument("test", help="the Python script to run against it (gets the URL as argv[1])")
+    parser.add_argument(
+        "test", help="the Python script to run against it (gets the URL as argv[1])"
+    )
     parser.add_argument("--port", type=int, default=None)
     parser.add_argument("--ready-timeout", type=float, default=DFLT_READY_TIMEOUT_S)
     args = parser.parse_args(argv)
     try:
-        run_app_test(args.app, args.test, port=args.port, ready_timeout_s=args.ready_timeout)
+        run_app_test(
+            args.app, args.test, port=args.port, ready_timeout_s=args.ready_timeout
+        )
     except subprocess.CalledProcessError as error:
         return error.returncode
     except RuntimeError as error:
